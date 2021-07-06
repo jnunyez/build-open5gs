@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
+. "$HERE/_env"
+
+
+CONTAINER_ID=$(buildah from "$BASE_IMAGE")
+
+function r () {
+	buildah run "$CONTAINER_ID" -- "$@"
+}
+
+if [ ! -d source ]; then
+    echo 'cloning repository...'
+    git clone https://github.com/open5gs/open5gs "$HERE/work/source" \
+        --branch "v$OPEN5GS_VERSION" \
+        --recursive \
+        --depth 1
+fi
+
+DIST=$HERE/work/dist
+
+buildah add "$CONTAINER_ID" "$HERE/assets/scripts/entrypoint" /bin/webui
+buildah add "$CONTAINER_ID" "/usr/bin/npm" /usr/bin/npm
+buildah add "$CONTAINER_ID" /vagrant/work/source/webui /open5gs/webui
+#r mkdir --parents /var/log/open5gs
+
+
+
+buildah config \
+	--entrypoint /bin/webui \
+        --workingdir /open5gs/webui \
+	"$CONTAINER_ID"
+
+buildah commit "$CONTAINER_ID" localhost/webui
