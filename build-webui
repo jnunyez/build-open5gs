@@ -34,3 +34,5 @@ buildah config \
 	"$CONTAINER_ID"
 
 buildah commit "$CONTAINER_ID" localhost/webui
+
+podman save localhost/webui:latest -o /vagrant/webui.tar
