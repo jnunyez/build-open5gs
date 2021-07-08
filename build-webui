@@ -8,7 +8,7 @@ HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
 CONTAINER_ID=$(buildah from "$BASE_IMAGE")
 
 function r () {
-	buildah run "$CONTAINER_ID" -- "$@"
+        buildah run "$CONTAINER_ID" -- "$@"
 }
 
 if [ ! -d source ]; then
@@ -21,17 +21,19 @@ fi
 
 DIST=$HERE/work/dist
 
-buildah add "$CONTAINER_ID" "$HERE/assets/scripts/entrypoint" /bin/webui
-buildah add "$CONTAINER_ID" "/usr/bin/npm" /usr/bin/npm
+buildah run "$CONTAINER_ID" -- dnf -y install npm
 buildah add "$CONTAINER_ID" /vagrant/work/source/webui /open5gs/webui
-#r mkdir --parents /var/log/open5gs
 
+buildah add "$CONTAINER_ID" "$HERE/assets/scripts/entrypoint" /bin/webui
 
 
 buildah config \
-	--entrypoint /bin/webui \
+        --entrypoint /bin/webui \
         --workingdir /open5gs/webui \
-	"$CONTAINER_ID"
+        "$CONTAINER_ID"
+
+buildah run "$CONTAINER_ID" -- cd /open5gs/webui
+buildah run "$CONTAINER_ID" -- npm ci --no-optional
 
 buildah commit "$CONTAINER_ID" localhost/webui
 

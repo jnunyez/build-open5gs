@@ -1,1 +1,1 @@
-sudo dnf -y install git npm buildah
+sudo dnf -y install git npm buildah podman
