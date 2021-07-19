@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
+. "$HERE/_env"
+
+mkdir --parents "$HERE/work"
+
+if [ ! -d source ]; then
+    git clone https://github.com/open5gs/open5gs "$HERE/work/source" \
+        --branch "v$OPEN5GS_VERSION" \
+        --recursive \
+        --depth 1
+fi
+
+cd "$HERE/work/source"
+meson build --buildtype=debug --prefix="$HERE/work/dist"
+
+cd build
+ninja clean
+ninja install

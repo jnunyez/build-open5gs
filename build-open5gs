@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
+
+$HERE/install-build-dependencies
+$HERE/build-binaries
+$HERE/build-container-image
