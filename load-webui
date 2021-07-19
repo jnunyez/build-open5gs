@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-
-HERE=$(dirname "$(readlink --canonicalize "$BASH_SOURCE")")
-
-docker image load --input $HERE/webui.tar
-docker image tag localhost/webui:latest localhost:5000/webui:2.3.1
-docker push localhost:5000/webui:2.3.1

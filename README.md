@@ -17,21 +17,33 @@ The image is built inside vagrant Fedora VM using buildah. Once the two images a
    cd /vagrant
    ```
 
-2. Build the open5gs and webui image:
+2. Build the image:
+	* Building open5gs base image:
+   
+   ```
+   build-open5gs
+   ```
+   
+   * Building web user interface base  image:
 
    ```
-   build-open5gs #TBA generation and diameter patches 
    build-webui
    ```
 
-3. Push webui container to registry (in this case an insecure registry):
+3. Push image (webui or open5gs) container to registry (in this case an insecure registry).
+
+   * Push open5gs base image:
+   ```
+   load-image open5gs 
+   ```
+
+   * Push webui base image:
 
    ```
-   load-webui
+   load-image webui
    ```
+
 
 4. Deploy on your preferred container cluster platform. See this [repo](https://github.com/jnunyez/kindk8s-open5gs) for deploying open5gs in k8s.
 
-## ToDo
 
-- Add open5gs image generator in addition to webui image generator.
