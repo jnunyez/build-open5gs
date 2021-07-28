@@ -37,4 +37,4 @@ buildah run "$CONTAINER_ID" -- npm ci --no-optional
 
 buildah commit "$CONTAINER_ID" localhost/webui
 
-podman save localhost/webui:latest -o /vagrant/webui.tar
+$HERE/load-image webui

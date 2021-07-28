@@ -48,4 +48,3 @@ buildah config \
 
 buildah commit "$CONTAINER_ID" localhost/open5gs:${OPEN5GS_VERSION}
 
-podman save localhost/open5gs:${OPEN5GS_VERSION} -o open5gs.tar
